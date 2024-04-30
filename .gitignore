@@ -1,3 +1,5 @@
 env/
 yolov8x.pt
 runs/detect/predict/08fd33_4.avi
+training/football-players-detection-1
+models/
