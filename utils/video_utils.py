@@ -19,3 +19,14 @@ def read_video(video_path):
     #Returns all the frames in a list
     return frames
 
+# Function that takes outputted video frames as a list, as well as a path to save the video and saves the video
+def save_video(output_video_frames, output_video_path):
+    #We define an output format as XVID
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    #Define a videowriter that takes in the video path(string), output video type, number of frames per second, output video frame width and height
+    out = cv2.VideoWriter(output_video_path, fourcc, 20.0, (output_video_frames[0].shape[1],output_video_frames[0].shape[0]))
+    #Loop over each frame and write each frame to the video writer
+    for frame in output_video_frames:
+        out.write(frame)
+    #Once done release the videowriter
+    out.release()
