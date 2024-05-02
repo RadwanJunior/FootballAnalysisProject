@@ -3,6 +3,7 @@ from ultralytics import YOLO
 import supervision as sv
 import pickle
 import os
+import cv2
 import sys
 sys.path.append('../')
 from utils import get_center_of_bbox, get_bbox_width
@@ -107,6 +108,29 @@ class Tracker:
         #put at the bottom of the bounding box at y2
         #We want center of circle to be center of bounding box
         y2 = int(bbox[2])
+
+        #get center for ellipse
+        x_center = get_center_of_bbox(bbox)
+        #for radius of ellipse
+        width = get_bbox_width(bbox)
+
+        cv2.ellipse(
+            frame,
+            center=(x_center,y2),
+            #Radius of the circle but we need to provide 2
+            axes=(int(width), int(0.35*width)),
+            angle=0.0,
+            #A bit at the end of the circle around the player will not be drawn but looks good and can play around
+            #gameified look
+            startAngle=45,
+            endAngle=235,
+            color=color,
+            thickness=2,
+            lineType=cv2.LINE_4
+        )
+    
+        return frame
+
 
     #Function to create a circle instead of the existing boxes around the players
     def draw_annotations(self,video_frames,tracks):
