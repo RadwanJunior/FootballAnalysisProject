@@ -8,6 +8,7 @@ def main():
     #Initilize Tracker
     tracker = Tracker('models/best.pt')
 
+    #Utilizes the tracker function to get the objects in the video frames, make sure to read if there is an existing prediction
     tracks = tracker.get_object_tracks(video_frames,
                                        read_from_stub=True,
                                        stub_path='stubs/track_stubs.pkl')
