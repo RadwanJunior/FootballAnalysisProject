@@ -122,7 +122,7 @@ class Tracker:
             angle=0.0,
             #A bit at the end of the circle around the player will not be drawn but looks good and can play around
             #gameified look
-            startAngle=45,
+            startAngle=-45,
             endAngle=235,
             color=color,
             thickness=2,
