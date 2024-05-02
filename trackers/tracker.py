@@ -3,6 +3,9 @@ from ultralytics import YOLO
 import supervision as sv
 import pickle
 import os
+import sys
+sys.path.append('../')
+from utils import get_center_of_bbox, get_bbox_width
 
 class Tracker:
     #Gets called when we initialize the class
@@ -100,4 +103,26 @@ class Tracker:
         #A dictionary of lists of dictionaries
         return tracks
 
+    def draw_ellipse(self, frame, bbox, color, track_id):
+        #put at the bottom of the bounding box at y2
+        #We want center of circle to be center of bounding box
+        y2 = int(bbox[2])
 
+    #Function to create a circle instead of the existing boxes around the players
+    def draw_annotations(self,video_frames,tracks):
+        #List containing all the video frames with output drawn on them
+        output_video_frames = []
+        #Loop over each frame
+        for frame_num, frame in enumerate(video_frames):
+            #Start drawing process
+            #Copy the frame to not pollute the frames coming in and the original list being passed is not being drawn on
+            frame = frame.copy()
+
+            player_dict = tracks["players"][frame_num]
+            ball_dict = tracks["ball"][frame_num]
+            referee_dict = tracks["referee"][frame_num]
+
+            #Draw players
+            for track_id, player in player_dict.items():
+                #Draw an ellipse with a red color
+                frame = self.draw_ellipse(frame, player["bbox"], (0,0,255), track_id)
