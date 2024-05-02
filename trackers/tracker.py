@@ -110,7 +110,7 @@ class Tracker:
         y2 = int(bbox[2])
 
         #get center for ellipse
-        x_center = get_center_of_bbox(bbox)
+        x_center, _ = get_center_of_bbox(bbox)
         #for radius of ellipse
         width = get_bbox_width(bbox)
 
@@ -133,7 +133,7 @@ class Tracker:
 
 
     #Function to create a circle instead of the existing boxes around the players
-    def draw_annotations(self,video_frames,tracks):
+    def draw_annotations(self, video_frames, tracks):
         #List containing all the video frames with output drawn on them
         output_video_frames = []
         #Loop over each frame
@@ -144,7 +144,7 @@ class Tracker:
 
             player_dict = tracks["players"][frame_num]
             ball_dict = tracks["ball"][frame_num]
-            referee_dict = tracks["referee"][frame_num]
+            referee_dict = tracks["referees"][frame_num]
 
             #Draw players
             for track_id, player in player_dict.items():

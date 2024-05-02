@@ -6,4 +6,4 @@ def get_center_of_bbox(bbox):
 
 #Get a bbox width
 def get_bbox_width(bbox):
-    return[2]-bbox[0]
+    return bbox[2]-bbox[0]
