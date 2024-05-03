@@ -107,7 +107,7 @@ class Tracker:
     def draw_ellipse(self, frame, bbox, color, track_id):
         #put at the bottom of the bounding box at y2
         #We want center of circle to be center of bounding box
-        y2 = int(bbox[2])
+        y2 = int(bbox[3])
 
         #get center for ellipse
         x_center, _ = get_center_of_bbox(bbox)
