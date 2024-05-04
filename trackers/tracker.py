@@ -3,6 +3,7 @@ from ultralytics import YOLO
 import supervision as sv
 import pickle
 import os
+import numpy as np
 import cv2
 import sys
 sys.path.append('../')
@@ -163,6 +164,23 @@ class Tracker:
             )
         return frame
 
+    #Draw the triangles on the ball
+    def draw_triangle(self, frame, bbox, color):
+        #Bottom point of y, y1 because we want the triangle on top of the ball
+        y = int(bbox[1])
+        x,_ = get_center_of_bbox(bbox)
+
+        #Define the three points of the triangle, numpy array of the 3 points
+        triangle_points = np.array([
+            [x,y],
+            [x-10, y-20],
+            [x+10, y-20],
+        ])
+        cv2.drawContours(frame, [triangle_points],0,color,cv2.FILLED)
+        #Draw a border, with same coordinates not filled but has edges
+        cv2.drawContours(frame, [triangle_points],0,(0,0,0),2)
+
+        return frame
 
     #Function to create a circle instead of the existing boxes around the players
     def draw_annotations(self, video_frames, tracks):
@@ -187,6 +205,10 @@ class Tracker:
             for _, referee in referee_dict.items():
                 #Draw an ellipse with a red color
                 frame = self.draw_ellipse(frame, referee["bbox"], (0,255,255))
+
+            #Draw ball
+            for track_id, ball in ball_dict.items():
+                frame = self.draw_triangle(frame,ball["bbox"],(0,255,0))
 
             output_video_frames.append(frame)
 
