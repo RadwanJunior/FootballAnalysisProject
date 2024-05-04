@@ -151,6 +151,6 @@ class Tracker:
                 #Draw an ellipse with a red color
                 frame = self.draw_ellipse(frame, player["bbox"], (0,0,255), track_id)
         
-        output_video_frames.append(frame)
+            output_video_frames.append(frame)
 
         return output_video_frames
