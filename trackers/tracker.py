@@ -104,7 +104,7 @@ class Tracker:
         #A dictionary of lists of dictionaries
         return tracks
 
-    def draw_ellipse(self, frame, bbox, color, track_id):
+    def draw_ellipse(self, frame, bbox, color, track_id=None):
         #put at the bottom of the bounding box at y2
         #We want center of circle to be center of bounding box
         y2 = int(bbox[3])
@@ -128,7 +128,39 @@ class Tracker:
             thickness=2,
             lineType=cv2.LINE_4
         )
-    
+        
+        #Draw rectangle for number under the player
+        rectangle_width = 40
+        rectangle_height = 20
+        #Top left corner. Move have of the width from the center of the rectangle
+        x1_rect = x_center - rectangle_width//2
+        x2_rect = x_center + rectangle_width//2
+        y1_rect = (y2 - rectangle_height//2) + 15
+        y2_rect = (y2 + rectangle_height//2) + 15
+
+        #Check if there is a track id and draw a rectangle if thats the case
+        if track_id is not None:
+            cv2.rectangle(frame,
+                          (int(x1_rect), int(y1_rect)),
+                          (int(x2_rect), int(y2_rect)),
+                          color,
+                          cv2.FILLED)
+            
+            #Visual Features and adjustments for larger number displayed
+            x1_text = x1_rect+12
+            if track_id > 99:
+                x1_text -=10
+
+
+            cv2.putText(
+                frame,
+                f"{track_id}",
+                (int(x1_text), int(y1_rect+15)),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.6,
+                (0,0,0),
+                2
+            )
         return frame
 
 
@@ -152,9 +184,9 @@ class Tracker:
                 frame = self.draw_ellipse(frame, player["bbox"], (0,0,255), track_id)
 
             #Draw referee ellipses
-            for track_id, referee in referee_dict.items():
+            for _, referee in referee_dict.items():
                 #Draw an ellipse with a red color
-                frame = self.draw_ellipse(frame, referee["bbox"], (0,255,255), track_id)
+                frame = self.draw_ellipse(frame, referee["bbox"], (0,255,255))
 
             output_video_frames.append(frame)
 
