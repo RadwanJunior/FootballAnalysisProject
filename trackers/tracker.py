@@ -4,6 +4,7 @@ import supervision as sv
 import pickle
 import os
 import numpy as np
+import pandas as pd
 import cv2
 import sys
 sys.path.append('../')
@@ -15,6 +16,27 @@ class Tracker:
         self.model = YOLO(model_path)
         self.tracker = sv.ByteTrack()
     
+    # Ball interpolation function
+    def interpolate_ball_positions(self, ball_positions):
+        #Convert ball positions into a panda data frame, but must be convereted to a list first
+
+        ball_positions = [x.get(1,{}).get("bbox", []) for x in ball_positions]
+        #Convert to panda data frame
+        df_ball_positions = pd.DataFrame(ball_positions, columns=['x1','y1','x2','y2'])
+
+        #Interpolate missing values
+        df_ball_positions = df_ball_positions.interpolate()
+        #Edge case if the missing detection is the first one, we can do this by replicating the nearest detection that we can find
+        #Basically backfill it
+        df_ball_positions = df_ball_positions.bfill()
+
+        #Return ball postitions back to original format, list of lists
+        # loops over all the things in df_ball positions then it puts it into a dictionary with 1 as track_id and the value is a dictionary of bounding boxes and the value for that will be x
+        ball_positions = [{1: {"bbox": x}}for x in df_ball_positions.to_numpy().tolist()]
+
+        return ball_positions
+
+
     def detect_frames(self, frames):
         #Add a batch size so we don't run into memory issues, instead of predicting on all frames. We are doing 20 at a time
         batch_size = 20
