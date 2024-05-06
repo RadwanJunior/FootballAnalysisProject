@@ -63,7 +63,7 @@ class CameraMovementEstimator():
             new_features, _, _ = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, old_features, None, **self.lk_params)
             #We need the max distance, because each frame will have multiple features and we want the max distance any two features
             max_distance = 0
-            camera_movement_x, camera_movement_y = 0.0
+            camera_movement_x, camera_movement_y = 0,0
 
             #To enumerate over any two list, we have to zip them first
             for i, (new,old) in enumerate(zip(new_features, old_features)):
@@ -98,7 +98,7 @@ class CameraMovementEstimator():
             frame = frame.copy()
 
             overlay = frame.copy()
-            cv2.rectangle(overlay, (0,0), (500,500), (255,255,255), cv2.FILLED)
+            cv2.rectangle(overlay, (0,0), (500,100), (255,255,255), cv2.FILLED)
             alpha = 0.6
             cv2.addWeighted(overlay, alpha, frame, 1-alpha, 0, frame)
 
