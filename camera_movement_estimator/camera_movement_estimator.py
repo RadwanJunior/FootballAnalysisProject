@@ -42,6 +42,22 @@ class CameraMovementEstimator():
 
         )
 
+    def add_adjust_positions_to_tracks(self, tracks, camera_movement_per_frame):
+        #Loop each of the object in each track
+        for object, object_tracks in tracks.items():
+            #Loop over each frame in the track
+            for frame_num, track in enumerate(object_tracks):
+                #For each frame, we will loop over each track id
+                for track_id, track_info in track.items():
+                    #Get the position
+                    position = track_info['position']
+                    #Adjust the position
+                    camera_movement = camera_movement_per_frame[frame_num]
+                    #Subtract x from camera movement x and y from camera movemnt y
+                    position_adjusted = (position[0]-camera_movement[0], position[1]-camera_movement[1])
+                    #Assign it
+                    tracks[object][frame_num][track_id]['position_adjusted'] = position_adjusted
+
     def get_camera_movement(self, frames, read_from_stub=False, stub_path=None):
         #Read the stub
         if read_from_stub and stub_path is not None and os.path.exists(stub_path):

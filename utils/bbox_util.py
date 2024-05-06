@@ -16,3 +16,8 @@ def measure_distance(p1,p2):
 def measure_xy_distance(p1,p2):
     #Return the distance between the two xs and two ys
     return p1[0]-p2[0], p1[1]-p2[1]
+
+#Returns the postion of the foot of the player in the bounding box by getting the center of the x and just the y
+def get_foot_position(bbox):
+    x1,y1,x2,y2 = bbox
+    return int((x1+x2)/2),int(y2)
