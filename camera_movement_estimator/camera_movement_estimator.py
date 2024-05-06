@@ -50,7 +50,7 @@ class CameraMovementEstimator():
 
         #Read the stub when we have it
         #This will be the camera movement for each frame being stored in this array (Movement of x and y multiplied by the lenght of frames we have)
-        camera_movement = [[0,0]*len(frames)]
+        camera_movement = [[0,0]]*len(frames)
 
         #convert the image into a grey image
         #Call all previous frames as old
@@ -65,7 +65,8 @@ class CameraMovementEstimator():
             max_distance = 0
             camera_movement_x, camera_movement_y = 0.0
 
-            for i, (new,old) in enumerate(new_features, old_features):
+            #To enumerate over any two list, we have to zip them first
+            for i, (new,old) in enumerate(zip(new_features, old_features)):
                 new_features_point = new.ravel()
                 old_features_point = old.ravel()
 
